@@ -11,6 +11,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('');
     const [filter, setFilter] = useState('');
     const [notificationMessage, setNotificationMessage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     useEffect(() => {
         console.log('effect');
@@ -40,6 +41,13 @@ const App = () => {
 
     const addPerson = (event) => {
         event.preventDefault();
+        if (!newName || !newNumber) {
+            setErrorMessage('Name or number is missing');
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 5000);
+            return;
+        }
         if (personExists(newName)) {
             if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
                 const person = persons.find((person) => person.name === newName);
@@ -76,6 +84,12 @@ const App = () => {
         if (window.confirm(`Delete ${person.name}?`)) {
             contactsService.deleteContact(id).then((response) => {
                 setPersons(persons.filter((person) => person.id !== id));
+            }).catch((error) => {
+                setErrorMessage(`Information of ${person.name} has already been removed from server`);
+                setTimeout(() => {
+                    setErrorMessage(null);
+                }, 5000);
+                setPersons(persons.filter((person) => person.id !== id));
             });
         }
     };
@@ -84,6 +98,7 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
             {notificationMessage && <Notification message={notificationMessage} type="success" />}
+            {errorMessage && <Notification message={errorMessage} type="error" />}
             <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
             <h2>add a new</h2>
