@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonFrom from './components/PersonForm';
+import contactsService from './services/contacts';
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -10,15 +10,13 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('');
     const [filter, setFilter] = useState('');
 
-    const hook = () => {
+    useEffect(() => {
         console.log('effect');
-        axios.get('http://localhost:5000/persons').then((response) => {
+        contactsService.getAll().then((initialPersons) => {
             console.log('promise fulfilled');
-            setPersons(response.data);
+            setPersons(initialPersons);
         });
-    };
-
-    useEffect(hook, []);
+    }, []);
 
     console.log('render', persons.length, 'persons');
 
@@ -48,8 +46,8 @@ const App = () => {
             name: newName,
             number: newNumber,
         };
-        axios.post('http://localhost:5000/persons', personObject).then((response) => {
-            setPersons(persons.concat(response.data));
+        contactsService.create(personObject).then((returnedPerson) => {
+            setPersons(persons.concat(returnedPerson));
         });
         setNewName('');
         setNewNumber('');
@@ -63,6 +61,7 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
             <Filter filter={filter} handleFilterChange={handleFilterChange} />
+
             <h2>add a new</h2>
             <PersonFrom
                 addPerson={addPerson}
@@ -71,6 +70,7 @@ const App = () => {
                 newNumber={newNumber}
                 handleNumberChange={handleNumberChange}
             />
+            
             <h2>Numbers</h2>
             <Persons persons={personsToShow} />
         </div>
