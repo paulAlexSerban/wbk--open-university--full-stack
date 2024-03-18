@@ -3,12 +3,14 @@ import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonFrom from './components/PersonForm';
 import contactsService from './services/contacts';
+import Notification from './components/Notification';
 
 const App = () => {
     const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [filter, setFilter] = useState('');
+    const [notificationMessage, setNotificationMessage] = useState(null);
 
     useEffect(() => {
         console.log('effect');
@@ -59,6 +61,10 @@ const App = () => {
         });
         setNewName('');
         setNewNumber('');
+        setNotificationMessage(`Added ${newName}`);
+        setTimeout(() => {
+            setNotificationMessage(null);
+        }, 5000);
     };
 
     const personExists = (name) => {
@@ -77,6 +83,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            {notificationMessage && <Notification message={notificationMessage} type="success" />}
             <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
             <h2>add a new</h2>
