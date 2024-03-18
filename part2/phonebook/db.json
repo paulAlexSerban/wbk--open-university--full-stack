@@ -39,6 +39,11 @@
             "name": "Jane Smith",
             "number": "987-654-321",
             "id": 8
+        },
+        {
+            "name": "Paul Serban",
+            "number": "+40-723-232-232",
+            "id": 9
         }
     ]
 }
