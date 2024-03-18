@@ -11,9 +11,14 @@ const create = async (newObject) => {
     return request.then((response) => response.data).catch((error) => console.log(error));
 };
 
+const update = async (id, newObject) => {
+    const request = axios.put(`${baseUrl}/${id}`, newObject);
+    return request.then((response) => response.data).catch((error) => console.log(error));
+};
+
 const deleteContact = async (id) => {
     const request = axios.delete(`${baseUrl}/${id}`);
     return request.then((response) => response.data).catch((error) => console.log(error));
 };
 
-export default { getAll, create, deleteContact };
+export default { getAll, create, update, deleteContact };
