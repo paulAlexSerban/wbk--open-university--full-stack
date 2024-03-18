@@ -1,25 +1,26 @@
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonFrom from './components/PersonForm';
 
-const DUMMY_DATA = [
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
-    { name: 'John Doe', number: '39-23-6423122', id: 5 },
-    { name: 'Jane Doe', number: '39-23-6423122', id: 6 },
-    { name: 'John Smith', number: '39-23-6423122', id: 7 },
-    { name: 'Jane Smith', number: '39-23-6423122', id: 8 },
-];
-
 const App = () => {
-    const [persons, setPersons] = useState(DUMMY_DATA);
+    const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [filter, setFilter] = useState('');
+
+    const hook = () => {
+        console.log('effect');
+        axios.get('http://localhost:5000/persons').then((response) => {
+            console.log('promise fulfilled');
+            setPersons(response.data);
+        });
+    };
+
+    useEffect(hook, []);
+
+    console.log('render', persons.length, 'persons');
 
     const handleFilterChange = (event) => {
         setFilter(event.target.value);
