@@ -32,7 +32,9 @@ const App = (props) => {
             {countriesToShow.length <= 10 && countriesToShow.length > 1 ? (
                 <ul>
                     {countriesToShow.map((country, index) => (
-                        <li key={index}>{country.name.common}</li>
+                        <li key={index}>{country.name.common}
+                            <button onClick={() => setFilter(country.name.common)}>show</button>
+                        </li>
                     ))}
                 </ul>
             ) : null}

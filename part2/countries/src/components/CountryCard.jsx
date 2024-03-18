@@ -11,7 +11,7 @@ const CountryCard = ({ country }) => {
                     <li key={index}>{language}</li>
                 ))}
             </ul>
-            <img src={country.flags.png} alt="flag" width="100" />
+            <img src={country.flags.png} alt="flag" width="300" />
         </div>
     );
 };
