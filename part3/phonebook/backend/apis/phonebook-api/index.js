@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 
 const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || 'localhost';
@@ -29,6 +30,7 @@ let persons = [
 ];
 
 app.use(express.json());
+app.use(morgan('tiny'));
 
 app.get('/', (request, response) => {
     response.json({ message: 'phonebook api is working' });
