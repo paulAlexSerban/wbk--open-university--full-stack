@@ -1,5 +1,5 @@
 const express = require('express');
-
+const middlewares = require('./middlewares.js');
 const PORT = process.env.PORT || 3001;
 const HOST = process.env.HOST || 'localhost';
 
@@ -23,7 +23,9 @@ let notes = [
     },
 ];
 
-app.use(express.json())
+app.use(express.json());
+
+app.use(middlewares.requestLogger);
 
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>');
@@ -54,33 +56,31 @@ app.get('/api/notes', (request, response) => {
 });
 
 const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
-    : 0
-  return maxId + 1
-}
+    const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
+    return maxId + 1;
+};
 
 app.post('/api/notes', (request, response) => {
-  const body = request.body
+    const body = request.body;
 
-  if (!body.content) {
-    return response.status(400).json({ 
-      error: 'content missing' 
-    })
-  }
+    if (!body.content) {
+        return response.status(400).json({
+            error: 'content missing',
+        });
+    }
 
-  const note = {
-    content: body.content,
-    important: Boolean(body.important) || false,
-    id: generateId(),
-  }
+    const note = {
+        content: body.content,
+        important: Boolean(body.important) || false,
+        id: generateId(),
+    };
 
-  notes = notes.concat(note)
+    notes = notes.concat(note);
 
-  response.json(note)
-})
+    response.json(note);
+});
 
-
+app.use(middlewares.unknownEndpoint);
 
 app.listen(PORT, () => {
     console.log(`Server running at http://${HOST}:${PORT}`);
