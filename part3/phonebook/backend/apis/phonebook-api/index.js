@@ -34,6 +34,15 @@ app.get('/', (request, response) => {
     response.json({ message: 'phonebook api is working' });
 });
 
+app.get('/info', (request, response) => {
+  const date = new Date();
+  const template = `
+    <p>Phonebook has info for ${persons.length} people</p>
+    <p>${date}</p>
+  `;
+  response.send(template);
+});
+
 app.get('/api/persons', (request, response) => {
     response.json(persons);
 });
