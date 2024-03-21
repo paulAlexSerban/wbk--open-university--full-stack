@@ -30,7 +30,12 @@ let persons = [
 ];
 
 app.use(express.json());
-app.use(morgan('tiny'));
+morgan.token("body", req => JSON.stringify(req.body));
+app.use(
+  morgan(
+    ":remote-addr :method :url :body - status :status length :res[content-length] - :response-time ms"
+  )
+);
 
 app.get('/', (request, response) => {
     response.json({ message: 'phonebook api is working' });
