@@ -35,12 +35,12 @@ app.get('/', (request, response) => {
 });
 
 app.get('/info', (request, response) => {
-  const date = new Date();
-  const template = `
+    const date = new Date();
+    const template = `
     <p>Phonebook has info for ${persons.length} people</p>
     <p>${date}</p>
   `;
-  response.send(template);
+    response.send(template);
 });
 
 app.get('/api/persons', (request, response) => {
@@ -56,6 +56,12 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end();
     }
+});
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id);
+    persons = persons.filter((person) => person.id !== id);
+    response.status(204).end();
 });
 
 app.listen(PORT, () => {
