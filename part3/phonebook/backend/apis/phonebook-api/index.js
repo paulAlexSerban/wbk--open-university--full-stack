@@ -64,6 +64,25 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end();
 });
 
+app.post('/api/persons', (request, response) => {
+    const body = request.body;
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'name or number is missing',
+        });
+    }
+
+    const person = {
+        id: Math.floor(Math.random() * 1000),
+        name: body.name,
+        number: body.number,
+    };
+
+    persons = persons.concat(person);
+    response.json(person);
+})
+
 app.listen(PORT, () => {
     console.log(`Server running at http://${HOST}:${PORT}`);
 });
